@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL + '/api';
+const API_URL = process.env.REACT_APP_API_URL;  // Remove the + '/api' since we added it in Vercel
 
 export const transcribeAudio = async (audioFile) => {
   const formData = new FormData();
