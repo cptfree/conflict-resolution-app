@@ -120,7 +120,7 @@ List 2-3 open-ended questions to:
 - Check understanding with the speaker`;
 
 const systemPrompts = {
- mediation: `You are a supportive mediator using proven conflict resolution techniques. Focus on:
+  mediation: `You are a supportive mediator using proven conflict resolution techniques. Focus on:
 1. Understanding feelings and needs of all parties without judgment
 2. Identifying shared interests rather than fixed positions
 3. Suggesting specific, actionable steps for moving forward
@@ -128,78 +128,63 @@ Keep responses clear and concise. Structure your response in three parts:
 - What you hear each party needs
 - Common ground/shared interests
 - 2-3 specific suggestions for next steps`,
-'Non-violent Communication': NVC_PROMPT,
-'Harvard': HARVARD_PROMPT,
-'Solution-Focused': SOLUTION_FOCUSED_PROMPT,
-'Active Listening': ACTIVE_LISTENING_PROMPT
+  'Non-violent Communication': NVC_PROMPT,
+  'Harvard': HARVARD_PROMPT,
+  'Solution-Focused': SOLUTION_FOCUSED_PROMPT,
+  'Active Listening': ACTIVE_LISTENING_PROMPT
 };
 
 dotenv.config();
 
 const app = express();
 
-const corsOptions = {
- origin: 'http://localhost:3000',
- methods: ['GET', 'POST'],
- allowedHeaders: ['Content-Type'],
-};
-
-app.use(cors(corsOptions));
+app.use(cors());  // Allow all origins
 app.use(express.json());
 
 const openai = new OpenAI({
- apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 app.post('/api/transcribe', upload.single('audioFile'), async (req, res) => {
- try {
-   if (!req.file) {
-     return res.status(400).json({ error: 'No audio file provided' });
-   }
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No audio file provided' });
+    }
 
-   const tempFilePath = path.join(__dirname, 'temp.webm');
-   fs.writeFileSync(tempFilePath, req.file.buffer);
+    const tempFilePath = path.join(__dirname, 'temp.webm');
+    fs.writeFileSync(tempFilePath, req.file.buffer);
 
-   const transcription = await openai.audio.transcriptions.create({
-     file: fs.createReadStream(tempFilePath),
-     model: "whisper-1",
-   });
+    const transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(tempFilePath),
+      model: "whisper-1",
+    });
 
-   fs.unlinkSync(tempFilePath);
-   res.json({ text: transcription.text });
- } catch (error) {
-   console.error('Transcribe error:', error);
-   res.status(500).json({ error: error.message });
- }
+    fs.unlinkSync(tempFilePath);
+    res.json({ text: transcription.text });
+  } catch (error) {
+    console.error('Transcribe error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.post('/api/analyze', async (req, res) => {
   try {
-    const { text, mode, prompt, framework } = req.body;
+    const { text, mode, framework } = req.body;
     
-    // Add debug logs
-    console.log('Server received:', {
-      mode,
-      framework,
-      promptStart: prompt ? prompt.substring(0, 100) + '...' : 'no prompt'
-    });
+    console.log('Server received:', { text, mode, framework });
     
-    // Use the custom prompt if provided, otherwise fall back to system prompts
     let systemPrompt;
     if (framework) {
       systemPrompt = systemPrompts[framework].replace('{{text}}', text);
     } else {
-      // If no framework and mode is 'text', use mediation
       systemPrompt = systemPrompts[mode === 'text' ? 'mediation' : mode];
     }
 
-    // Prevent null systemPrompt
     if (!systemPrompt) {
       systemPrompt = systemPrompts.mediation;
     }
 
-    // Add debug log for system prompt
-    console.log('Using system prompt:', systemPrompt ? systemPrompt.substring(0, 100) + '...' : 'no system prompt');
+    console.log('Using system prompt:', systemPrompt.substring(0, 100) + '...');
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
