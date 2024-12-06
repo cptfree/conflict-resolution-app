@@ -2,7 +2,7 @@
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-// Validate API_URL is set
+// Validate that the environment variable is set correctly
 if (!API_URL) {
   console.error('API_URL environment variable is not set');
 }
@@ -29,6 +29,7 @@ export const analyzeText = async (text, mode, selectedFramework = null) => {
       body: JSON.stringify(payload)
     });
 
+    // Logging the response status and headers for debugging
     console.log('POST request details:', {
       status: response.status,
       statusText: response.statusText,
