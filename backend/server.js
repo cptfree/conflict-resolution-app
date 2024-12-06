@@ -139,7 +139,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: /^https:\/\/conflict-resolution.*\.vercel\.app$/,
+  origin: 'https://conflict-resolution-app-five.vercel.app',
   methods: ['GET', 'POST'],
   credentials: true
 }));
