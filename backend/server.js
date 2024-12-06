@@ -138,7 +138,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());  // Allow all origins
+app.use(cors({
+  origin: 'https://conflict-resolution-app-oyoa.vercel.app',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 const openai = new OpenAI({
