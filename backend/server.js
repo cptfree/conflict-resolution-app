@@ -138,12 +138,20 @@ dotenv.config();
 
 const app = express();
 
-// CORS configuration to allow frontend to access API
-app.use(cors({
-  origin: 'https://conflict-resolution-app-five.vercel.app', // Replace with your frontend URL
-  methods: ['GET', 'POST'],
-  credentials: true // Enable cookies or authentication headers
-}));
+// Replace CORS middleware with direct headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://conflict-resolution-app-five.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  
+  next();
+});
 
 app.use(express.json());
 
