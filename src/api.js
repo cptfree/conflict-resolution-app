@@ -1,6 +1,6 @@
 // src/api.js
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;https://conflict-resolution-app-oyoa.vercel.app/
 
 // Validate that the environment variable is set correctly
 if (!API_URL) {
