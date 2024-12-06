@@ -138,10 +138,11 @@ dotenv.config();
 
 const app = express();
 
+// CORS configuration to allow frontend to access API
 app.use(cors({
-  origin: 'https://conflict-resolution-app-five.vercel.app',
+  origin: 'https://conflict-resolution-app-five.vercel.app', // Replace with your frontend URL
   methods: ['GET', 'POST'],
-  credentials: true
+  credentials: true // Enable cookies or authentication headers
 }));
 
 app.use(express.json());
