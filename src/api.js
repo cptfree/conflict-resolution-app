@@ -1,11 +1,6 @@
 // src/api.js
 
-const API_URL = process.env.REACT_APP_API_URL;https://conflict-resolution-app-oyoa.vercel.app/
-
-// Validate that the environment variable is set correctly
-if (!API_URL) {
-  console.error('API_URL environment variable is not set');
-}
+const API_URL = "https://conflict-resolution-app-oyoa.vercel.app";
 
 export const analyzeText = async (text, mode, selectedFramework = null) => {
   try {
@@ -22,18 +17,12 @@ export const analyzeText = async (text, mode, selectedFramework = null) => {
 
     const response = await fetch(`${API_URL}/api/analyze`, {
       method: 'POST',
+      mode: 'cors', // Explicitly set CORS mode
+      credentials: 'include', // Include credentials if needed
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
-    });
-
-    // Logging the response status and headers for debugging
-    console.log('POST request details:', {
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries())
     });
 
     if (!response.ok) {
@@ -42,7 +31,6 @@ export const analyzeText = async (text, mode, selectedFramework = null) => {
     }
 
     const data = await response.json();
-    console.log('Analysis successful:', data);
     return data;
   } catch (error) {
     console.error('Analysis error:', {
@@ -61,7 +49,7 @@ export const transcribeAudio = async (audioFile) => {
     const formData = new FormData();
     formData.append('audioFile', audioFile);
     
-    console.log('Transcription request:', {
+    console.log('Making transcription request:', {
       url: `${API_URL}/api/transcribe`,
       fileSize: audioFile.size,
       fileType: audioFile.type
@@ -69,13 +57,9 @@ export const transcribeAudio = async (audioFile) => {
     
     const response = await fetch(`${API_URL}/api/transcribe`, {
       method: 'POST',
+      mode: 'cors', // Explicitly set CORS mode
+      credentials: 'include', // Include credentials if needed
       body: formData
-    });
-
-    console.log('Transcribe response details:', {
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries())
     });
 
     if (!response.ok) {
@@ -84,7 +68,6 @@ export const transcribeAudio = async (audioFile) => {
     }
 
     const data = await response.json();
-    console.log('Transcription successful:', data);
     return data;
   } catch (error) {
     console.error('Transcription error:', {
