@@ -141,7 +141,7 @@ const app = express();
 
 // Replace CORS middleware with direct headers
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://conflict-resolution-app-five.vercel.app');
+  res.header('Access-Control-Allow-Origin', 'https://conflict-resolution-app-frontend.vercel.app');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -155,7 +155,7 @@ app.use((req, res, next) => {
 });
 
 app.options('/api/analyze', (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'https://conflict-resolution-app-five.vercel.app');
+  res.header('Access-Control-Allow-Origin', 'https://conflict-resolution-app-frontend.vercel.app');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Credentials', 'true');
