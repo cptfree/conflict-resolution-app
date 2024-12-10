@@ -18,7 +18,7 @@ export const analyzeText = async (text, mode, selectedFramework = null) => {
     const response = await fetch(`${API_URL}/api/analyze`, {
       method: 'POST',
       mode: 'cors', // Explicitly set CORS mode
-      credentials: 'include', // Include credentials if needed
+      credentials: 'omit', // Include credentials if needed
       headers: {
         'Content-Type': 'application/json'
       },
@@ -58,7 +58,7 @@ export const transcribeAudio = async (audioFile) => {
     const response = await fetch(`${API_URL}/api/transcribe`, {
       method: 'POST',
       mode: 'cors', // Explicitly set CORS mode
-      credentials: 'include', // Include credentials if needed
+      credentials: 'omit', // Include credentials if needed
       body: formData
     });
 
