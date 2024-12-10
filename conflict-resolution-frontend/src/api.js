@@ -1,6 +1,6 @@
 // src/api.js
 
-const API_URL = "https://conflict-resolution-app-oyoa.vercel.app";
+const API_URL = "https://conflict-resolution-app-backend.vercel.app";
 
 export const analyzeText = async (text, mode, selectedFramework = null) => {
   try {
