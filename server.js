@@ -196,7 +196,8 @@ app.post('/api/analyze', async (req, res) => {
   try {
     const { text, mode, framework } = req.body;
     
-    console.log('Server received:', { text, mode, framework });
+    // Log what we received
+    console.log('Received request:', { text, mode, framework });
     
     let systemPrompt;
     if (framework) {
@@ -223,8 +224,12 @@ app.post('/api/analyze', async (req, res) => {
     });
     res.json({ analysis: completion.choices[0].message.content });
   } catch (error) {
-    console.error('Analysis error:', error);
-    res.status(500).json({ error: error.message });
+    // Log the full error
+    console.error('Full error:', error);
+    res.status(500).json({ 
+      error: error.message,
+      details: error.stack 
+    });
   }
 });
 
